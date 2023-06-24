@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="PrawoJazdy.CategorySelectionPage"
+             xmlns:viewModel="clr-namespace:PrawoJazdy.Pages.CategorySelection"
+             xmlns:enums="clr-namespace:PrawoJazdy.Enums"
+             xmlns:converters="clr-namespace:PrawoJazdy.Converters"
+             x:DataType="viewModel:CategorySelectionViewModel"
+              >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ComparisonConverter x:Key="ComparisonConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="Center">
+        <StackLayout WidthRequest="200" Margin="0 0 10 0">
+            <RadioButton GroupName="category" Content="A" IsChecked="{Binding SelectedCategory, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:LicenseCategory.A}}" />
+            <RadioButton GroupName="category" Content="B" IsChecked="{Binding SelectedCategory, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:LicenseCategory.B}}" />
+        </StackLayout>
+        <Button Text="Dalej" WidthRequest="200" Command="{Binding NextClickedCommand}"/>
+    </FlexLayout>
+
+</ContentPage>
