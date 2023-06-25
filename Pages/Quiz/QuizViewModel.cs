@@ -42,7 +42,6 @@ public partial class QuizViewModel : ObservableObject
     [ObservableProperty]
     public bool canGoToNextQuestion;
 
-
     partial void OnCurrentQuestionIndexChanged(int value)
     {
         if (value < 0) value = 0;

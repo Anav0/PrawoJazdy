@@ -47,7 +47,7 @@
                        />
 
             <CollectionView ItemsSource="{Binding CurrentQuestion.PossibleAnwsers}" >
-                
+
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal"/>
                 </CollectionView.ItemsLayout>
@@ -55,6 +55,8 @@
                     <DataTemplate x:DataType="{x:Type models:Anwser}">
                         <RadioButton  
                         Margin="0,0,0,10"
+                        MinimumWidthRequest="150"
+                        TextColor="Black"
                                     IsChecked="{Binding IsChecked}"
                                     Content="{Binding Label}" 
                                     Value="{Binding Value}" >

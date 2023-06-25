@@ -21,4 +21,14 @@ public class Question
     public MediaSource VideoPath { get; set; }
 
     public ResourceType ResourceType { get; set; }
+
+    public int Points { get;set; }
+    public string Name { get; internal set; }
+    public string Number { get; internal set; }
+    public string Scope { get; internal set; }
+    public string Category { get; internal set; }
+    public string BlockName { get; internal set; }
+    public string Source { get; internal set; }
+    public HashSet<string> Categories { get; internal set; }
+    public MaterialRange Range { get; internal set; }
 }
