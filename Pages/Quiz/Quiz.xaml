@@ -3,20 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PrawoJazdy.Pages.QuizPage"
              xmlns:viewModels="clr-namespace:PrawoJazdy.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="clr-namespace:PrawoJazdy.Models"
              x:DataType="viewModels:QuizViewModel"
-             Title="Quiz"
-             >
+             Title="Quiz">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="364"/>
         </Grid.ColumnDefinitions>
 
-        <FlexLayout BackgroundColor="SkyBlue" Grid.Column="0">
-            
-        </FlexLayout>
-        <VerticalStackLayout BackgroundColor="IndianRed" Grid.Column="1"></VerticalStackLayout>
+        <VerticalStackLayout IsVisible="{Binding IsLoading}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Label Text="Wczytywanie bazy pytań" FontSize="Caption"/>
+            <ProgressBar  IsVisible="{Binding IsLoading}" Progress="{Binding LoadingProgress}" BackgroundColor="White" ProgressColor="SkyBlue" />
+        </VerticalStackLayout>
 
+        <FlexLayout AlignItems="Center" JustifyContent="Center" Grid.Row="1" BackgroundColor="Wheat" Grid.Column="0" Direction="Column">
+            <Label Text="{Binding CurrentQuestion.QuestionAsked}" TextColor="Black" FontSize="Medium"/>
+
+            <CollectionView ItemsSource="{Binding CurrentQuestion.PossibleAnwsers}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:Anwser}">
+                        <RadioButton  
+                                    IsChecked="{Binding IsChecked}"
+                                    Content="{Binding Label}" 
+                                    Value="{Binding Value}" >
+                        </RadioButton>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <FlexLayout JustifyContent="Center" AlignContent="SpaceEvenly">
+                <Button IsEnabled="{Binding CanGoToPrevQuestion}" Text="Poprzednie" Command="{Binding PrevClickedCommand}"/>
+                <Button IsEnabled="{Binding CanGoToNextQuestion}" Text="Następne" Command="{Binding NextClickedCommand}"/>
+            </FlexLayout>
+        </FlexLayout>
     </Grid>
 </ContentPage>
