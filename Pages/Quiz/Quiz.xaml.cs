@@ -1,4 +1,6 @@
-﻿using PrawoJazdy.Models;
+﻿using CommunityToolkit.Maui.Views;
+using PrawoJazdy.Enums;
+using PrawoJazdy.Models;
 using PrawoJazdy.ViewModels;
 
 namespace PrawoJazdy.Pages;
@@ -10,6 +12,8 @@ public partial class QuizPage : ContentPage
         vm.Questions.Add(new Question()
         {
             QuestionAsked = "Ma mały ogon 1",
+            VideoPath = MediaSource.FromFile("d:\\Projects\\PrawoJazdy\\Resources\\Raw\\P_klipy\\7A3102.wmv"),
+            ResourceType = ResourceType.Video,
             CorrectAnwserIndex = 0,
             PossibleAnwsers = new List<Anwser>()
             {
@@ -23,6 +27,8 @@ public partial class QuizPage : ContentPage
         {
             QuestionAsked = "Ma mały ogon 2",
             CorrectAnwserIndex = 2,
+            ImagePath = "A_klipy/3A101.jpg",
+            ResourceType = ResourceType.Image,
             PossibleAnwsers = new List<Anwser>()
             {
                 new Anwser("Kotek",0),

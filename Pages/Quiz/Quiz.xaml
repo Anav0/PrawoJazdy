@@ -5,8 +5,15 @@
              xmlns:viewModels="clr-namespace:PrawoJazdy.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:PrawoJazdy.Models"
+             xmlns:enums="clr-namespace:PrawoJazdy.Enums"
              x:DataType="viewModels:QuizViewModel"
              Title="Quiz">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -24,15 +31,30 @@
         </VerticalStackLayout>
 
         <FlexLayout AlignItems="Center" JustifyContent="Center" Grid.Row="1" BackgroundColor="Wheat" Grid.Column="0" Direction="Column">
-            <Label Text="{Binding CurrentQuestion.QuestionAsked}" TextColor="Black" FontSize="Medium"/>
+            <Label Text="{Binding CurrentQuestion.QuestionAsked}" TextColor="Black" FontSize="Medium" Margin="0,0,0,10"/>
 
-            <CollectionView ItemsSource="{Binding CurrentQuestion.PossibleAnwsers}">
+            <Image IsVisible="{Binding CurrentQuestion.ResourceType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static enums:ResourceType.Image}}" 
+                      HeightRequest="600"
+                   Source="{Binding CurrentQuestion.ImagePath}"/>
+
+            <toolkit:MediaElement
+                      ShouldAutoPlay="True"
+                      ShouldShowPlaybackControls="True"
+                      IsVisible="{Binding CurrentQuestion.ResourceType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static enums:ResourceType.Video}}"
+                      Source="{Binding CurrentQuestion.VideoPath}"
+                      HeightRequest="600"
+                      Margin="0,0,0,10"
+                       />
+
+            <CollectionView ItemsSource="{Binding CurrentQuestion.PossibleAnwsers}" >
+                
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Anwser}">
                         <RadioButton  
+                        Margin="0,0,0,10"
                                     IsChecked="{Binding IsChecked}"
                                     Content="{Binding Label}" 
                                     Value="{Binding Value}" >
@@ -41,10 +63,10 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <FlexLayout JustifyContent="Center" AlignContent="SpaceEvenly">
-                <Button IsEnabled="{Binding CanGoToPrevQuestion}" Text="Poprzednie" Command="{Binding PrevClickedCommand}"/>
-                <Button IsEnabled="{Binding CanGoToNextQuestion}" Text="Następne" Command="{Binding NextClickedCommand}"/>
-            </FlexLayout>
+            <HorizontalStackLayout>
+                <Button WidthRequest="150" Margin="0,0,20,0" IsEnabled="{Binding CanGoToPrevQuestion}" Text="Poprzednie" Command="{Binding PrevClickedCommand}"/>
+                <Button WidthRequest="150" IsEnabled="{Binding CanGoToNextQuestion}" Text="Następne" Command="{Binding NextClickedCommand}"/>
+            </HorizontalStackLayout>
         </FlexLayout>
     </Grid>
 </ContentPage>
