@@ -3,12 +3,12 @@
     x:Class="PrawoJazdy.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:PrawoJazdy"
+    xmlns:pages="clr-namespace:PrawoJazdy.Pages"
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Wybór kategorii"
-        ContentTemplate="{DataTemplate local:CategorySelectionPage}"
+        Title="Wybór kategori"
+        ContentTemplate="{DataTemplate pages:CategorySelectionPage}"
         Route="CategorySelection" />
 
 </Shell>

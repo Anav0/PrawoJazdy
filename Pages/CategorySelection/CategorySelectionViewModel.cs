@@ -1,23 +1,27 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PrawoJazdy.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PrawoJazdy.Pages;
 
-namespace PrawoJazdy.Pages.CategorySelection;
+namespace PrawoJazdy.ViewModels;
 
 public partial class CategorySelectionViewModel : ObservableObject
 {
     [ObservableProperty]
     public LicenseCategory selectedCategory;
 
-    [RelayCommand]
-    void OnNextClicked() 
-    {
+    [ObservableProperty]
+    public Mode selectedMode;
 
-    } 
+    [RelayCommand]
+    async void OnNextClicked()
+    {
+        var url = $"{nameof(QuizPage)}?Mode={SelectedMode}&LicenseCategory={SelectedCategory}";
+        await Shell.Current.GoToAsync(nameof(QuizPage), new Dictionary<string, object>()
+        {
+            { "Mode", SelectedMode},
+            { "LicenseCategory", SelectedCategory},
+        });
+    }
 
 }

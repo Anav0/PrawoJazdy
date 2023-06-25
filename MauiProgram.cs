@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
-using PrawoJazdy.Pages.CategorySelection;
+using PrawoJazdy.ViewModels;
+using PrawoJazdy.Pages;
 
 namespace PrawoJazdy;
 
@@ -20,6 +21,8 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<CategorySelectionPage>();
 		builder.Services.AddSingleton<CategorySelectionViewModel>();
+		builder.Services.AddTransient<QuizPage>();
+		builder.Services.AddTransient<QuizViewModel>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

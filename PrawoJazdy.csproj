@@ -71,4 +71,10 @@
 	  <Folder Include="Models\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Pages\Quiz\Quiz.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

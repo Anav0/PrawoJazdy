@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="PrawoJazdy.CategorySelectionPage"
-             xmlns:viewModel="clr-namespace:PrawoJazdy.Pages.CategorySelection"
+             x:Class="PrawoJazdy.Pages.CategorySelectionPage"
+             xmlns:viewModels="clr-namespace:PrawoJazdy.ViewModels"
              xmlns:enums="clr-namespace:PrawoJazdy.Enums"
              xmlns:converters="clr-namespace:PrawoJazdy.Converters"
-             x:DataType="viewModel:CategorySelectionViewModel"
+             x:DataType="viewModels:CategorySelectionViewModel"
               >
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -14,12 +14,18 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="Center">
-        <StackLayout WidthRequest="200" Margin="0 0 10 0">
+    <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="SpaceEvenly" HeightRequest="500">
+        <StackLayout WidthRequest="300">
+            <Label Text="Wybierz kategorię którą chcesz uzyskać" FontSize="Medium" />
             <RadioButton GroupName="category" Content="A" IsChecked="{Binding SelectedCategory, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:LicenseCategory.A}}" />
             <RadioButton GroupName="category" Content="B" IsChecked="{Binding SelectedCategory, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:LicenseCategory.B}}" />
         </StackLayout>
-        <Button Text="Dalej" WidthRequest="200" Command="{Binding NextClickedCommand}"/>
+        <VerticalStackLayout WidthRequest="300">
+            <Label Text="Tryb" FontSize="Medium"/>
+            <RadioButton GroupName="mode" Content="Trening" IsChecked="{Binding SelectedMode, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:Mode.Traning}}" />
+            <RadioButton GroupName="mode" Content="Egzamin" IsChecked="{Binding SelectedMode, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static enums:Mode.Exam}}" />
+        </VerticalStackLayout>
+        <Button Text="Dalej" WidthRequest="300" Command="{Binding NextClickedCommand}"/>
     </FlexLayout>
 
 </ContentPage>

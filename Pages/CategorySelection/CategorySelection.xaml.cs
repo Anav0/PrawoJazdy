@@ -1,7 +1,6 @@
-﻿using PrawoJazdy.Enums;
-using PrawoJazdy.Pages.CategorySelection;
+﻿using PrawoJazdy.ViewModels;
 
-namespace PrawoJazdy;
+namespace PrawoJazdy.Pages;
 
 public partial class CategorySelectionPage : ContentPage
 {
