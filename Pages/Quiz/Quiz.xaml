@@ -6,10 +6,31 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:PrawoJazdy.Models"
              xmlns:enums="clr-namespace:PrawoJazdy.Enums"
+             xmlns:converters="clr-namespace:PrawoJazdy.Converters"
              x:DataType="viewModels:QuizViewModel"
              Title="Quiz">
 
     <ContentPage.Resources>
+        <Style TargetType="Frame">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="Grey" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="CadetBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
         <ResourceDictionary>
             <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
         </ResourceDictionary>
@@ -17,7 +38,6 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -25,12 +45,7 @@
             <ColumnDefinition Width="364"/>
         </Grid.ColumnDefinitions>
 
-        <VerticalStackLayout IsVisible="{Binding IsLoading}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <Label Text="Wczytywanie bazy pytań" FontSize="Caption"/>
-            <ProgressBar  IsVisible="{Binding IsLoading}" Progress="{Binding LoadingProgress}" BackgroundColor="White" ProgressColor="SkyBlue" />
-        </VerticalStackLayout>
-
-        <FlexLayout AlignItems="Center" JustifyContent="Center" Grid.Row="1" BackgroundColor="Wheat" Grid.Column="0" Direction="Column">
+        <FlexLayout AlignItems="Center" JustifyContent="Center" BackgroundColor="Wheat" Grid.Column="0" Direction="Column">
             <Label Text="{Binding CurrentQuestion.QuestionAsked}" TextColor="Black" FontSize="Medium" Margin="0,0,0,10"/>
 
             <Image IsVisible="{Binding CurrentQuestion.ResourceType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static enums:ResourceType.Image}}" 
@@ -46,29 +61,32 @@
                       Margin="0,0,0,10"
                        />
 
-            <CollectionView ItemsSource="{Binding CurrentQuestion.PossibleAnwsers}" >
+            <CollectionView Margin="0,10" ItemsSource="{Binding CurrentQuestion.PossibleAnwsers}" SelectionMode="Single" SelectedItem="{Binding CurrentQuestion.AnwserGiven, Mode=TwoWay}">
 
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal"/>
                 </CollectionView.ItemsLayout>
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Anwser}">
-                        <RadioButton  
-                        Margin="0,0,0,10"
-                        MinimumWidthRequest="150"
-                        TextColor="Black"
-                                    IsChecked="{Binding IsChecked}"
-                                    Content="{Binding Label}" 
-                                    Value="{Binding Value}" >
-                        </RadioButton>
+                        <Frame Padding="10" MinimumWidthRequest="150">
+                            <Button Text="{Binding Text}" Padding="0" Margin="0" />
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
             <HorizontalStackLayout>
                 <Button WidthRequest="150" Margin="0,0,20,0" IsEnabled="{Binding CanGoToPrevQuestion}" Text="Poprzednie" Command="{Binding PrevClickedCommand}"/>
-                <Button WidthRequest="150" IsEnabled="{Binding CanGoToNextQuestion}" Text="Następne" Command="{Binding NextClickedCommand}"/>
+                <Button WidthRequest="150" IsEnabled="{Binding CanGoToNextQuestion}" Text="{Binding NextBtnLabel}" Command="{Binding NextClickedCommand}"/>
             </HorizontalStackLayout>
+        </FlexLayout>
+
+        <FlexLayout Grid.Column="1" BackgroundColor="CadetBlue" Direction="Column">
+            <Label Text="{Binding TimerLabel}" FontSize="Header"/>
+            <Label Text="{Binding ModeLabel}" FontSize="Medium" />
+            <Label Text="{Binding ProgressLabel}" FontSize="Medium"/>
+            <Label Text="{Binding StatusLabel}" FontSize="Medium"/>
         </FlexLayout>
     </Grid>
 </ContentPage>

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using PrawoJazdy.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ public class Question
     public string QuestionAsked { get; set; }
 
     public int CorrectAnwserIndex { get; set; }
+    public int? AnwserGivenIndex { get; set; }
+    public Anwser AnwserGiven { get; set; }
 
     public List<Anwser> PossibleAnwsers { get; set; }
 

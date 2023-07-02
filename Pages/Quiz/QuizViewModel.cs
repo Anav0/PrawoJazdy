@@ -42,6 +42,23 @@ public partial class QuizViewModel : ObservableObject
     [ObservableProperty]
     public bool canGoToNextQuestion;
 
+    [ObservableProperty]
+    public string progressLabel;
+
+    [ObservableProperty]
+    public string timerLabel = "10:00";
+
+    [ObservableProperty]
+    public string statusLabel;
+
+    [ObservableProperty]
+    public string modeLabel;
+
+    [ObservableProperty]
+    public string nextBtnLabel = "Sprawdź";
+
+    public bool wasNextBtnClick = false;
+
     partial void OnCurrentQuestionIndexChanged(int value)
     {
         if (value < 0) value = 0;
@@ -50,16 +67,33 @@ public partial class QuizViewModel : ObservableObject
         CanGoToNextQuestion = value < Questions.Count - 1;
         CanGoToPrevQuestion = value > 0;
 
+        UpdateProgressLabel(value);
+
         CurrentQuestion = Questions[value];
         CurrentQuestionIndex = value;
+    }
+
+    public void UpdateProgressLabel(int newIndex)
+    {
+        ProgressLabel = $"{newIndex + 1}/{Questions.Count}";
+
     }
 
     [RelayCommand]
     void OnNextClicked()
     {
-        var checkedAnwserIndex = CurrentQuestion.PossibleAnwsers.FindIndex(x => x.IsChecked);
+        if (CurrentQuestion.AnwserGivenIndex == null) return;
 
-        if (checkedAnwserIndex == -1) return;
+        if (Mode == Mode.Traning && !wasNextBtnClick)
+        {
+            wasNextBtnClick = true;
+            NextBtnLabel = "Dalej";
+            return;
+        }
+        else
+        {
+            wasNextBtnClick = true;
+        }
 
         CurrentQuestionIndex++;
     }

@@ -4,11 +4,10 @@ public class Anwser
 {
     public Anwser(string label, int value)
     {
-        Label = label;
+        Text = label;
         Value = value;
     }
 
-    public string Label { get; set; }
+    public string Text { get; set; }
     public int Value { get; set; }
-    public bool IsChecked { get; set; }
 }

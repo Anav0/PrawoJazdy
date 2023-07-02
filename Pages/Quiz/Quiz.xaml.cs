@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Maui.Views;
 using PrawoJazdy.Enums;
+using PrawoJazdy.Extentions;
 using PrawoJazdy.Models;
 using PrawoJazdy.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace PrawoJazdy.Pages;
 
@@ -13,14 +15,16 @@ public partial class QuizPage : ContentPage
     {
         Application excel = new Application();
 
-        var lines = File.ReadAllLines("d:\\Projects\\PrawoJazdy\\Resources\\Raw\\pytania.csv");
+        var questionsPath = FileSystem.Current.GetPathToFileInAppData("pytania.csv");
+        var lines = File.ReadAllLines(questionsPath);
 
         var headers = lines[0].Split(";");
 
         var questions = new List<Question>();
 
         var linesSkipped = new List<string[]>();
-        for (int i = 1; i < lines.Length; i++)
+        var skipedDueToLackOfFile = new List<string[]>();
+        for (int i = 1; i < 10; i++)
         {
             var values = lines[i].Split(";");
 
@@ -30,10 +34,17 @@ public partial class QuizPage : ContentPage
                 continue;
             }
 
+            var resourceName = values[15];
+
+            if (resourceName == "")
+            {
+                linesSkipped.Add(values);
+                continue;
+            }
+
             var isYesOrNoQuestion = values[3] == "";
             var possibleAnwsers = new List<Anwser>();
             var correctAnwserIndex = -1;
-            var resourceName = values[15];
 
             if (isYesOrNoQuestion)
             {
@@ -47,7 +58,7 @@ public partial class QuizPage : ContentPage
                 possibleAnwsers.Add(new Anwser(values[4], 1));
                 possibleAnwsers.Add(new Anwser(values[5], 2));
                 var correctAnwser = values[14];
-                correctAnwserIndex = possibleAnwsers.FindIndex(x => x.Label == correctAnwser);
+                correctAnwserIndex = possibleAnwsers.FindIndex(x => x.Text == correctAnwser);
             }
 
             var question = new Question()
@@ -55,7 +66,7 @@ public partial class QuizPage : ContentPage
                 Name = values[0],
                 Number = values[1],
                 QuestionAsked = values[2],
-                PossibleAnwsers = possibleAnwsers,
+                PossibleAnwsers = new List<Anwser>(possibleAnwsers),
                 CorrectAnwserIndex = correctAnwserIndex,
                 Scope = values[16],
                 Points = int.Parse(values[17]),
@@ -65,12 +76,15 @@ public partial class QuizPage : ContentPage
                 Range = values[16] == "PODSTAWOWY" ? MaterialRange.Base : MaterialRange.Specialist,
             };
 
+            var filePath = FileSystem.Current.GetPathToFileInAppData(values[15]);
+
             question.ResourceType = resourceName.EndsWith(".wmv") ? ResourceType.Video : ResourceType.Image;
 
             if (question.ResourceType == ResourceType.Image)
-                question.ImagePath = $"Obrazy/{values[15]}";
+                question.ImagePath = filePath;
             else
-                question.VideoPath = MediaSource.FromFile($"Filmy/{values[15]}");
+                question.VideoPath = MediaSource.FromFile(filePath);
+
 
             questions.Add(question);
         }
@@ -86,6 +100,9 @@ public partial class QuizPage : ContentPage
         vm.CurrentQuestion = vm.Questions[0];
         vm.CanGoToNextQuestion = true;
         vm.CanGoToPrevQuestion = false;
+        vm.UpdateProgressLabel(0);
+
+        vm.ModeLabel = "Trening";
 
         InitializeComponent();
 
@@ -143,8 +160,8 @@ public partial class QuizPage : ContentPage
 
         var total = finalQuestions.Sum(q => q.Points);
 
-        if (total != 74) throw new Exception("Number of points is not equal 74!");
+        //if (total != 74) throw new Exception("Number of points is not equal 74!");
 
-        return relevanteQuestions;
+        return finalQuestions;
     }
 }
